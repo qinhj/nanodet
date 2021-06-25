@@ -1,3 +1,9 @@
+# model ckpt
+*.ckpt
+
+# env config
+*.rc
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
