@@ -56,7 +56,7 @@ class Predictor(object):
                     raw_img=img,
                     img=img)
         meta = self.pipeline(meta, self.cfg.data.val.input_size)
-        meta['img'] = torch.from_numpy(meta['img'].transpose(2, 0, 1)).unsqueeze(0).to(self.device)
+        meta['img'] = torch.from_numpy(meta['img'].transpose(2, 0, 1)).unsqueeze(0).to(self.device) # hwc -> chw
         with torch.no_grad():
             results = self.model.inference(meta)
         return meta, results
@@ -82,12 +82,12 @@ def get_image_list(path):
 def main():
     args = parse_args()
     local_rank = 0
-    torch.backends.cudnn.enabled = True
-    torch.backends.cudnn.benchmark = True
+    #torch.backends.cudnn.enabled = True
+    #torch.backends.cudnn.benchmark = True
 
     load_config(cfg, args.config)
     logger = Logger(local_rank, use_tensorboard=False)
-    predictor = Predictor(cfg, args.model, logger, device='cuda:0')
+    predictor = Predictor(cfg, args.model, logger, device='cpu')
     logger.log('Press "Esc", "q" or "Q" to exit.')
     current_time = time.localtime()
     if args.demo == 'image':
